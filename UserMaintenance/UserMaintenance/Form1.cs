@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UserMaintenance.Entities;
 
 namespace UserMaintenance
 {
@@ -18,6 +19,19 @@ namespace UserMaintenance
             lblLastName.Text = Resource1.FirstName;
             lblFirstName.Text = Resource1.LastName;
             btnAdd.Text = Resource1.Add;
+
+            listUsers.DataSource = users;
+            listUsers.ValueMember = "ID";
+            listUsers.DisplayMember = "FullName";
+        }
+        BindingList<User> users = new BindingList<User>();
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            User u = new User();
+            u.LastName = lblLastName.Text;
+            u.FirstName = lblFirstName.Text;
+            users.Add(u);
         }
     }
 }
