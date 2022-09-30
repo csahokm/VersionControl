@@ -29,8 +29,8 @@ namespace UserMaintenance
         private void btnAdd_Click(object sender, EventArgs e)
         {
             User u = new User();
-            u.LastName = lblLastName.Text;
-            u.FirstName = lblFirstName.Text;
+            u.LastName = tbLastName.Text;
+            u.FirstName = tbFirstName.Text;
             users.Add(u);
         }
     }
