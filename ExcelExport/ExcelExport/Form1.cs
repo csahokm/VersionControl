@@ -27,7 +27,7 @@ namespace ExcelExport
             LoadData();
             CreateExcel();
         }
-        void LoadData()
+        public void LoadData()
         {
             flats = context.Flat.ToList();
         }
@@ -46,6 +46,7 @@ namespace ExcelExport
                 
                 // Tábla létrehozása
                 CreateTable(); // Ennek megírása a következő feladatrészben következik
+                FormatTable(); // Az elkészült munkalap formázása
 
                 // Control átadása a felhasználónak
                 xlApp.Visible = true;
@@ -63,10 +64,8 @@ namespace ExcelExport
                 xlApp = null;
             }
         }
-        void CreateTable()
-        {
-            string[] headers = new string[]
-            {
+        string[] headers = new string[]
+{
                 "Kód",
                 "Eladó",
                 "Oldal",
@@ -76,7 +75,11 @@ namespace ExcelExport
                 "Alapterület (m2)",
                 "Ár (mFt)",
                 "Négyzetméter ár (Ft/m2)"
-            };
+        };
+        int counter = 0;
+        void CreateTable()
+        {
+
             // csak a headert ezzel a módszerrel, mert nagy adatra lassú
             for (int i = 0; i < headers.Length; i++)
             {
@@ -85,7 +88,7 @@ namespace ExcelExport
 
             // többi adat ezzel a módszerrel
             object[,] values = new object[flats.Count, headers.Length];
-            int counter = 0;
+            
             foreach (Flat f in flats)
             {
                 values[counter, 0] = f.Code;
@@ -102,6 +105,29 @@ namespace ExcelExport
             xlSheet.get_Range(GetCell(2, 1), GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
 
         }
+
+        void FormatTable()
+        {
+            Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length)); // csak a fejléc
+            headerRange.Font.Bold = true;
+            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerRange.EntireColumn.AutoFit();
+            headerRange.RowHeight = 40;
+            headerRange.Interior.Color = Color.LightBlue;
+            headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            Excel.Range fullRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1 + counter, headers.Length)); // az egész táblázat
+            Excel.Range firstColumn = xlSheet.get_Range(GetCell(2, 1), GetCell(1+counter,1)); // első oszlop (kivéve a fejlécet)
+            Excel.Range lastColumn = xlSheet.get_Range(GetCell(2, headers.Length), GetCell(1 + counter, headers.Length)); // utolsó oszlop (kivéve a fejlécet)
+
+            fullRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick); // körben vastag szegély
+            firstColumn.Font.Bold = true; // első oszlop félkövér
+            firstColumn.Interior.Color = Color.LightYellow; // első oszlop háttérszíne halványsárga
+            lastColumn.Interior.Color = Color.LightGreen; // utolsó oszlop háttérszíne halványzöld
+            lastColumn.NumberFormat = "0.##"; // utolsó oszlop két tizedesjegyre
+        }
+
         private string GetCell(int x, int y)
         {
             string ExcelCoordinate = "";
