@@ -17,10 +17,14 @@ namespace MnbCurrencyReader
     public partial class Form1 : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
+        BindingList<string> Currencies = new BindingList<string>();
+
         public Form1()
         {
             InitializeComponent();
             dataGridView1.DataSource = Rates;
+            comboBox1.DataSource = Currencies;
+            XMLProcessing2(CallWebService2());
             RefreshData();
         }
         private string CallWebService()
@@ -37,6 +41,15 @@ namespace MnbCurrencyReader
             var result = response.GetExchangeRatesResult; // store the result
             return result;
         }
+        private string CallWebService2()
+        {
+            var mnbService = new MNBArfolyamServiceSoapClient(); // client access
+            var request = new GetCurrenciesRequestBody(); // request parameters
+
+            var response = mnbService.GetCurrencies(request); // make the request
+            var result = response.GetCurrenciesResult; // store the result
+            return result;
+        }
         private void XMLProcessing(string result)
         {
             var xml = new XmlDocument();
@@ -47,6 +60,10 @@ namespace MnbCurrencyReader
                 Rates.Add(rate);
                 rate.Date = DateTime.Parse(element.GetAttribute("date")); // date
                 var childElement = (XmlElement)element.ChildNodes[0];
+                if(childElement == null)
+                {
+                    continue;
+                }
                 rate.Currency = childElement.GetAttribute("curr");
                 var unit = decimal.Parse(childElement.GetAttribute("unit"));
                 var value = decimal.Parse(childElement.InnerText);
@@ -55,6 +72,16 @@ namespace MnbCurrencyReader
                     rate.Value = value / unit;
                 }
 
+            }
+        }
+        private void XMLProcessing2(string result)
+        {
+            var xml = new XmlDocument();
+            xml.LoadXml(result);
+            foreach (XmlElement element in xml.DocumentElement.ChildNodes[0])
+            {
+                var curr = element.InnerText;
+                Currencies.Add(curr);
             }
         }
         private void CreateChart()
