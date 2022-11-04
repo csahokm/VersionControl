@@ -14,10 +14,10 @@ namespace SantaFactory
 {
     public partial class Form1 : Form
     {
-        List<Toy> _balls = new List<Toy>();
+        List<Toy> _toys = new List<Toy>();
 
-        private BallFactory _factory;
-        public BallFactory Factory
+        private IToyFactory _factory;
+        public IToyFactory Factory
         {
             get { return _factory; }
             set { _factory = value; }
@@ -25,33 +25,33 @@ namespace SantaFactory
         public Form1()
         {
             InitializeComponent();
-            Factory = new BallFactory();
+            Factory = new CarFactory();
         }
 
         private void conveyorTimer_Tick(object sender, EventArgs e)
         {
             int maxLeft = 0;
-            foreach(Ball b in _balls)
+            foreach(Toy t in _toys)
             {
-                b.MoveToy();
-                if(b.Left > maxLeft)
+                t.MoveToy();
+                if(t.Left > maxLeft)
                 {
-                    maxLeft = b.Left;
+                    maxLeft = t.Left;
                 }
             }
             if(maxLeft > 1000)
             {
-                Toy firstBall = _balls[0];
-                _balls.Remove(firstBall);
-                mainPanel.Controls.Remove(firstBall);
+                Toy firstToy = _toys[0];
+                _toys.Remove(firstToy);
+                mainPanel.Controls.Remove(firstToy);
             }
         }
         private void createTimer_Tick(object sender, EventArgs e)
         {
-            var b = Factory.CreateNew();
-            _balls.Add(b);
-            mainPanel.Controls.Add(b);
-            b.Left = -b.Width;
+            var t = Factory.CreateNew();
+            _toys.Add(t);
+            mainPanel.Controls.Add(t);
+            t.Left = -t.Width;
         }
     }
 }
