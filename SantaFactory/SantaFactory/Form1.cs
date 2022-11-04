@@ -2,6 +2,7 @@
 using SantaFactory.Entities;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace SantaFactory
@@ -87,6 +88,15 @@ namespace SantaFactory
             if (colorPicker.ShowDialog() != DialogResult.OK)
                 return;
             button.BackColor = colorPicker.Color;
+        }
+
+        private void btnPresent_Click(object sender, EventArgs e)
+        {
+            Factory = new PresentFactory
+            {
+                RibbonColor = btnRibbonColor.BackColor,
+                BoxColor = btnBoxColor.BackColor
+            };
         }
     }
 }
