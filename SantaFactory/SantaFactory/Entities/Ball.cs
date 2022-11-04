@@ -13,7 +13,13 @@ namespace SantaFactory.Entities
     {
         protected override void DrawImage(Graphics g)
         {
-            g.FillEllipse(new SolidBrush(Color.Blue), 0, 0, Width, Height);
+            g.FillEllipse(BallColor, 0, 0, Width, Height);
         }
+        public SolidBrush BallColor { get; private set; }
+        public Ball(Color color)
+        {
+            BallColor = new SolidBrush(color);
+        }
+
     }
 }
