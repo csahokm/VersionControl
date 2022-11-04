@@ -1,4 +1,5 @@
-﻿using SantaFactory.Entities;
+﻿using SantaFactory.Abstractions;
+using SantaFactory.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +14,7 @@ namespace SantaFactory
 {
     public partial class Form1 : Form
     {
-        List<Ball> _balls = new List<Ball>();
+        List<Toy> _balls = new List<Toy>();
 
         private BallFactory _factory;
         public BallFactory Factory
@@ -40,14 +41,14 @@ namespace SantaFactory
             }
             if(maxLeft > 1000)
             {
-                Ball firstBall = _balls[0];
+                Toy firstBall = _balls[0];
                 _balls.Remove(firstBall);
                 mainPanel.Controls.Remove(firstBall);
             }
         }
         private void createTimer_Tick(object sender, EventArgs e)
         {
-            Ball b = Factory.CreateNew();
+            var b = Factory.CreateNew();
             _balls.Add(b);
             mainPanel.Controls.Add(b);
             b.Left = -b.Width;
