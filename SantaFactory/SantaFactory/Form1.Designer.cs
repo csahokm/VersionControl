@@ -36,6 +36,7 @@ namespace SantaFactory
             this.btnCar = new System.Windows.Forms.Button();
             this.createTimer = new System.Windows.Forms.Timer(this.components);
             this.conveyorTimer = new System.Windows.Forms.Timer(this.components);
+            this.btnBallColor = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,6 +45,7 @@ namespace SantaFactory
             this.mainPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.mainPanel.Controls.Add(this.btnBallColor);
             this.mainPanel.Controls.Add(this.label1);
             this.mainPanel.Controls.Add(this.btnBall);
             this.mainPanel.Controls.Add(this.btnCar);
@@ -96,6 +98,16 @@ namespace SantaFactory
             this.conveyorTimer.Interval = 10;
             this.conveyorTimer.Tick += new System.EventHandler(this.conveyorTimer_Tick);
             // 
+            // btnBallColor
+            // 
+            this.btnBallColor.BackColor = System.Drawing.SystemColors.Highlight;
+            this.btnBallColor.Location = new System.Drawing.Point(92, 81);
+            this.btnBallColor.Name = "btnBallColor";
+            this.btnBallColor.Size = new System.Drawing.Size(60, 26);
+            this.btnBallColor.TabIndex = 3;
+            this.btnBallColor.UseVisualStyleBackColor = false;
+            this.btnBallColor.Click += new System.EventHandler(this.btnBallColor_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -118,6 +130,7 @@ namespace SantaFactory
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnBall;
         private System.Windows.Forms.Button btnCar;
+        private System.Windows.Forms.Button btnBallColor;
     }
 }
 
