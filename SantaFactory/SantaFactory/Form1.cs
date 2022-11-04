@@ -32,7 +32,7 @@ namespace SantaFactory
             int maxLeft = 0;
             foreach(Ball b in _balls)
             {
-                b.MoveBall();
+                b.MoveToy();
                 if(b.Left > maxLeft)
                 {
                     maxLeft = b.Left;
