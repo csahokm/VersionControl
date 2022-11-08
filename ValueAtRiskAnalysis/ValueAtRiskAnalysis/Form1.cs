@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace ValueAtRiskAnalysis
         List<Tick> ticks;
         PortfolioEntities context = new PortfolioEntities();
         List<PortfolioItem> portfolio = new List<PortfolioItem>();
+        List<decimal> gains = new List<decimal>();
 
         public Form1()
         {
@@ -25,7 +27,7 @@ namespace ValueAtRiskAnalysis
 
             CreatePortfolio();
 
-            List<decimal> gains = new List<decimal>();
+            //List<decimal> gains = new List<decimal>();
             int interval = 30;
             DateTime startDate = (from x in ticks select x.TradingDay).Min();
             DateTime endDate = new DateTime(2016, 12, 30);
@@ -43,6 +45,7 @@ namespace ValueAtRiskAnalysis
                                       select x)
                                         .ToList();
             MessageBox.Show(gainsOrdered[gainsOrdered.Count() / 5].ToString());
+
         }
         private void CreatePortfolio()
         {
@@ -65,6 +68,23 @@ namespace ValueAtRiskAnalysis
                 value += (decimal)last.Price * item.Volume;
             }
             return value;
+        }
+
+        private void saveBtn_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            if(sfd.ShowDialog() != DialogResult.OK) { return; }
+
+            using (StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.Default))
+            {
+                sw.WriteLine("Időszak;Nyereség"); // CSV format
+                int index = 1;
+                foreach(decimal gain in gains)
+                {
+                    sw.WriteLine($"{index};{gain}");
+                    index++;
+                }
+            }
         }
     }
 }
